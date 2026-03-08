@@ -48,7 +48,7 @@ class GlobalData():
 
 @sdl3.SDL_AppInit_func
 def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-argument
-    """pong"""
+    """SDL_AppInit"""
     if not sdl3.SDL_Init(sdl3.SDL_INIT_VIDEO):
         sdl3.SDL_Log("Couldn't initialize SDL: %s".encode() % sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
@@ -74,7 +74,7 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
 
 @sdl3.SDL_AppEvent_func
 def SDL_AppEvent(appstate, event):# pylint: disable=invalid-name, unused-argument
-    """pong"""
+    """SDL_AppEvent"""
     if sdl3.SDL_DEREFERENCE(event).type == sdl3.SDL_EVENT_QUIT:
         return sdl3.SDL_APP_SUCCESS
     if sdl3.SDL_DEREFERENCE(event).type == sdl3.SDL_EVENT_KEY_DOWN:
@@ -99,7 +99,7 @@ def SDL_AppEvent(appstate, event):# pylint: disable=invalid-name, unused-argumen
     return sdl3.SDL_APP_CONTINUE
 
 def keyboard(delta_time):
-    """pong"""
+    """keyboard"""
     # Left racket
     if GlobalData.LEFT_RACKET_KEYS["up"]:
         GlobalData.racketLeftY -= GlobalData.RACKET_SPEED * delta_time
@@ -113,7 +113,7 @@ def keyboard(delta_time):
         GlobalData.racketRightY += GlobalData.RACKET_SPEED * delta_time
 
 def update_ball(delta_time):
-    """pong"""
+    """update_ball"""
     # Fly the ball a bit
     GlobalData.ballPosX += GlobalData.ballDirX * GlobalData.BALL_SPEED * delta_time
     GlobalData.ballPosY += GlobalData.ballDirY * GlobalData.BALL_SPEED * delta_time
@@ -172,7 +172,7 @@ def update_ball(delta_time):
 
 @sdl3.SDL_AppIterate_func
 def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
-    """pong"""
+    """SDL_AppIterate"""
     # Delta time
     current_time = sdl3.SDL_GetTicks()
     delta_time = (current_time - GlobalData.lastTime) / 1000
@@ -222,4 +222,4 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
 
 @sdl3.SDL_AppQuit_func
 def SDL_AppQuit(appstate, result):# pylint: disable=invalid-name, unused-argument
-    """pong"""
+    """SDL_AppQuit"""
