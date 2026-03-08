@@ -9,8 +9,8 @@ import sdl3 # pylint: disable=wrong-import-position
 
 class GlobalData():
     """global data"""
-    renderer = ctypes.POINTER(sdl3.SDL_Renderer)()
-    window = ctypes.POINTER(sdl3.SDL_Window)()
+    RENDERER = ctypes.POINTER(sdl3.SDL_Renderer)()
+    WINDOW = ctypes.POINTER(sdl3.SDL_Window)()
 
     leftRacketKeys = { "up": False, "down": False }
     rightRacketKeys = { "up": False, "down": False }
@@ -60,11 +60,11 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
 
     if not sdl3.SDL_CreateWindowAndRenderer(
     "Pong NoobTuts using PySDL3".encode(), GlobalData.canvasWidth,
-    GlobalData.canvasHeight, 0, GlobalData.window, GlobalData.renderer):
+    GlobalData.canvasHeight, 0, GlobalData.WINDOW, GlobalData.RENDERER):
         sdl3.SDL_Log("Couldn't create window/renderer: %s".encode() % sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
-    sdl3.SDL_SetRenderVSync(GlobalData.renderer, 1) # Turn on vertical sync
+    sdl3.SDL_SetRenderVSync(GlobalData.RENDERER, 1) # Turn on vertical sync
 
     GlobalData.font = sdl3.TTF_OpenFont("C:/Windows/Fonts/arial.ttf".encode(), 26)
     if not GlobalData.font:
@@ -185,39 +185,39 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     # Update the ball
     update_ball(delta_time)
 
-    sdl3.SDL_SetRenderDrawColor(GlobalData.renderer, 0, 0, 0, sdl3.SDL_ALPHA_OPAQUE)
-    sdl3.SDL_RenderClear(GlobalData.renderer)
+    sdl3.SDL_SetRenderDrawColor(GlobalData.RENDERER, 0, 0, 0, sdl3.SDL_ALPHA_OPAQUE)
+    sdl3.SDL_RenderClear(GlobalData.RENDERER)
 
     # Draw the left racket
-    sdl3.SDL_SetRenderDrawColor(GlobalData.renderer, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
+    sdl3.SDL_SetRenderDrawColor(GlobalData.RENDERER, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
     rect = sdl3.SDL_FRect(GlobalData.racketLeftX, GlobalData.racketLeftY,
     GlobalData.racketWidth, GlobalData.racketHeight)
-    sdl3.SDL_RenderFillRect(GlobalData.renderer, rect)
+    sdl3.SDL_RenderFillRect(GlobalData.RENDERER, rect)
 
     # Draw the right racket
-    sdl3.SDL_SetRenderDrawColor(GlobalData.renderer, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
+    sdl3.SDL_SetRenderDrawColor(GlobalData.RENDERER, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
     rect = sdl3.SDL_FRect(GlobalData.racketRightX, GlobalData.racketRightY,
     GlobalData.racketWidth, GlobalData.racketHeight)
-    sdl3.SDL_RenderFillRect(GlobalData.renderer, rect)
+    sdl3.SDL_RenderFillRect(GlobalData.RENDERER, rect)
 
     # Draw the ball
-    sdl3.SDL_SetRenderDrawColor(GlobalData.renderer, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
+    sdl3.SDL_SetRenderDrawColor(GlobalData.RENDERER, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
     rect = sdl3.SDL_FRect(GlobalData.ballPosX - GlobalData.ballSize / 2, GlobalData.ballPosY -
     GlobalData.ballSize / 2, GlobalData.ballSize, GlobalData.ballSize)
-    sdl3.SDL_RenderFillRect(GlobalData.renderer, rect)
+    sdl3.SDL_RenderFillRect(GlobalData.RENDERER, rect)
 
     score_text = "%d:%d".encode() % (GlobalData.scoreLeft, GlobalData.scoreRight)
     surface = sdl3.TTF_RenderText_Blended(GlobalData.font, score_text, len(score_text),
     GlobalData.textColor)
-    GlobalData.textTexture = sdl3.SDL_CreateTextureFromSurface(GlobalData.renderer, surface)
+    GlobalData.textTexture = sdl3.SDL_CreateTextureFromSurface(GlobalData.RENDERER, surface)
     sdl3.SDL_DestroySurface(surface)
 
     width, height = ctypes.c_float(), ctypes.c_float()
     sdl3.SDL_GetTextureSize(GlobalData.textTexture, ctypes.byref(width), ctypes.byref(height))
     rect = sdl3.SDL_FRect(GlobalData.canvasWidth / 2 - 18, 5, width.value, height.value)
-    sdl3.SDL_RenderTexture(GlobalData.renderer, GlobalData.textTexture, None, rect)
+    sdl3.SDL_RenderTexture(GlobalData.RENDERER, GlobalData.textTexture, None, rect)
 
-    sdl3.SDL_RenderPresent(GlobalData.renderer)
+    sdl3.SDL_RenderPresent(GlobalData.RENDERER)
     sdl3.SDL_DestroyTexture(GlobalData.textTexture)
     return sdl3.SDL_APP_CONTINUE
 
