@@ -12,8 +12,8 @@ class GlobalData():
     RENDERER = ctypes.POINTER(sdl3.SDL_Renderer)()
     WINDOW = ctypes.POINTER(sdl3.SDL_Window)()
 
-    leftRacketKeys = { "up": False, "down": False }
-    rightRacketKeys = { "up": False, "down": False }
+    LEFT_RACKET_KEYS = { "up": False, "down": False }
+    RIGHT_RACKET_KEYS = { "up": False, "down": False }
 
     font = None
     textColor = sdl3.SDL_Color(255, 255, 255)
@@ -65,7 +65,6 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
         return sdl3.SDL_APP_FAILURE
 
     sdl3.SDL_SetRenderVSync(GlobalData.RENDERER, 1) # Turn on vertical sync
-
     GlobalData.font = sdl3.TTF_OpenFont("C:/Windows/Fonts/arial.ttf".encode(), 26)
     if not GlobalData.font:
         sdl3.SDL_Log("Error: %s".encode() % sdl3.SDL_GetError())
@@ -80,37 +79,37 @@ def SDL_AppEvent(appstate, event):# pylint: disable=invalid-name, unused-argumen
         return sdl3.SDL_APP_SUCCESS
     if sdl3.SDL_DEREFERENCE(event).type == sdl3.SDL_EVENT_KEY_DOWN:
         if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_W:
-            GlobalData.leftRacketKeys["up"] = True
+            GlobalData.LEFT_RACKET_KEYS["up"] = True
         if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_S:
-            GlobalData.leftRacketKeys["down"] = True
+            GlobalData.LEFT_RACKET_KEYS["down"] = True
         if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_UP:
-            GlobalData.rightRacketKeys["up"] = True
+            GlobalData.RIGHT_RACKET_KEYS["up"] = True
         if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_DOWN:
-            GlobalData.rightRacketKeys["down"] = True
+            GlobalData.RIGHT_RACKET_KEYS["down"] = True
     elif sdl3.SDL_DEREFERENCE(event).type == sdl3.SDL_EVENT_KEY_UP:
         if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_W:
-            GlobalData.leftRacketKeys["up"] = False
+            GlobalData.LEFT_RACKET_KEYS["up"] = False
         if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_S:
-            GlobalData.leftRacketKeys["down"] = False
+            GlobalData.LEFT_RACKET_KEYS["down"] = False
         if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_UP:
-            GlobalData.rightRacketKeys["up"] = False
+            GlobalData.RIGHT_RACKET_KEYS["up"] = False
         if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_DOWN:
-            GlobalData.rightRacketKeys["down"] = False
+            GlobalData.RIGHT_RACKET_KEYS["down"] = False
 
     return sdl3.SDL_APP_CONTINUE
 
 def keyboard(delta_time):
     """pong"""
     # Left racket
-    if GlobalData.leftRacketKeys["up"]:
+    if GlobalData.LEFT_RACKET_KEYS["up"]:
         GlobalData.racketLeftY -= GlobalData.racketSpeed * delta_time
-    if GlobalData.leftRacketKeys["down"]:
+    if GlobalData.LEFT_RACKET_KEYS["down"]:
         GlobalData.racketLeftY += GlobalData.racketSpeed * delta_time
 
     # Right racket
-    if GlobalData.rightRacketKeys["up"]:
+    if GlobalData.RIGHT_RACKET_KEYS["up"]:
         GlobalData.racketRightY -= GlobalData.racketSpeed * delta_time
-    if GlobalData.rightRacketKeys["down"]:
+    if GlobalData.RIGHT_RACKET_KEYS["down"]:
         GlobalData.racketRightY += GlobalData.racketSpeed * delta_time
 
 def update_ball(delta_time):
