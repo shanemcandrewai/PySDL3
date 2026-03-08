@@ -1,11 +1,10 @@
 """pong"""
 import ctypes
 import os
-
 os.environ["SDL_MAIN_USE_CALLBACKS"] = "1"
 os.environ["SDL_RENDER_DRIVER"] = "opengl"
-
 import sdl3 # pylint: disable=wrong-import-position
+
 RENDERER = ctypes.POINTER(sdl3.SDL_Renderer)()
 WINDOW = ctypes.POINTER(sdl3.SDL_Window)()
 LEFT_RACKET_KEYS = { "up": False, "down": False }
@@ -21,7 +20,7 @@ RACKET_RIGHT_X = CANVAS_WIDTH - RACKET_WIDTH - 10
 BALL_SIZE = 8
 BALL_SPEED = 125
 
-GLOBALDATA = {
+GLOBAL_DATA = {
     "font" : None,
     "scoreLeft" : 0,
     "scoreRight" : 0,
@@ -53,8 +52,8 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
         return sdl3.SDL_APP_FAILURE
 
     sdl3.SDL_SetRenderVSync(RENDERER, 1) # Turn on vertical sync
-    GLOBALDATA["font"] = sdl3.TTF_OpenFont("C:/Windows/Fonts/arial.ttf".encode(), 26)
-    if not GLOBALDATA["font"]:
+    GLOBAL_DATA["font"] = sdl3.TTF_OpenFont("C:/Windows/Fonts/arial.ttf".encode(), 26)
+    if not GLOBAL_DATA["font"]:
         sdl3.SDL_Log("Error: %s".encode() % sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
@@ -90,81 +89,81 @@ def keyboard(delta_time):
     """keyboard"""
     # Left racket
     if LEFT_RACKET_KEYS["up"]:
-        GLOBALDATA["racketLeftY"] -= RACKET_SPEED * delta_time
+        GLOBAL_DATA["racketLeftY"] -= RACKET_SPEED * delta_time
     if LEFT_RACKET_KEYS["down"]:
-        GLOBALDATA["racketLeftY"] += RACKET_SPEED * delta_time
+        GLOBAL_DATA["racketLeftY"] += RACKET_SPEED * delta_time
 
     # Right racket
     if RIGHT_RACKET_KEYS["up"]:
-        GLOBALDATA["racketRightY"] -= RACKET_SPEED * delta_time
+        GLOBAL_DATA["racketRightY"] -= RACKET_SPEED * delta_time
     if RIGHT_RACKET_KEYS["down"]:
-        GLOBALDATA["racketRightY"] += RACKET_SPEED * delta_time
+        GLOBAL_DATA["racketRightY"] += RACKET_SPEED * delta_time
 
 def update_ball(delta_time):
     """update_ball"""
     # Fly the ball a bit
-    GLOBALDATA["ballPosX"] += GLOBALDATA["ballDirX"] * BALL_SPEED * delta_time
-    GLOBALDATA["ballPosY"] += GLOBALDATA["ballDirY"] * BALL_SPEED * delta_time
+    GLOBAL_DATA["ballPosX"] += GLOBAL_DATA["ballDirX"] * BALL_SPEED * delta_time
+    GLOBAL_DATA["ballPosY"] += GLOBAL_DATA["ballDirY"] * BALL_SPEED * delta_time
 
     # Hit by left racket?
     if (
-            GLOBALDATA["ballPosX"] < RACKET_LEFT_X + RACKET_WIDTH and
-            GLOBALDATA["ballPosX"] > RACKET_LEFT_X and
-            GLOBALDATA["ballPosY"] < GLOBALDATA["racketLeftY"] +
-            RACKET_HEIGHT and GLOBALDATA["ballPosY"] > GLOBALDATA["racketLeftY"]
+            GLOBAL_DATA["ballPosX"] < RACKET_LEFT_X + RACKET_WIDTH and
+            GLOBAL_DATA["ballPosX"] > RACKET_LEFT_X and
+            GLOBAL_DATA["ballPosY"] < GLOBAL_DATA["racketLeftY"] +
+            RACKET_HEIGHT and GLOBAL_DATA["ballPosY"] > GLOBAL_DATA["racketLeftY"]
         ):
         # Set the fly direction depending on where it hit the racket
         # t is 0.5 if hit at top, 0 at center, -0.5 at bottom
-        t = ((GLOBALDATA["ballPosY"] - GLOBALDATA["racketLeftY"]) / RACKET_HEIGHT) - 0.5
-        GLOBALDATA["ballDirX"] = abs(GLOBALDATA["ballDirX"]) # Force it to be positive
-        GLOBALDATA["ballDirY"] = t
+        t = ((GLOBAL_DATA["ballPosY"] - GLOBAL_DATA["racketLeftY"]) / RACKET_HEIGHT) - 0.5
+        GLOBAL_DATA["ballDirX"] = abs(GLOBAL_DATA["ballDirX"]) # Force it to be positive
+        GLOBAL_DATA["ballDirY"] = t
         print(t)
 
     # Hit by right racket?
     if (
-            GLOBALDATA["ballPosX"] < RACKET_RIGHT_X + RACKET_WIDTH and
-            GLOBALDATA["ballPosX"] > RACKET_RIGHT_X and
-            GLOBALDATA["ballPosY"] < GLOBALDATA["racketRightY"] + RACKET_HEIGHT and
-            GLOBALDATA["ballPosY"] > GLOBALDATA["racketRightY"]
+            GLOBAL_DATA["ballPosX"] < RACKET_RIGHT_X + RACKET_WIDTH and
+            GLOBAL_DATA["ballPosX"] > RACKET_RIGHT_X and
+            GLOBAL_DATA["ballPosY"] < GLOBAL_DATA["racketRightY"] + RACKET_HEIGHT and
+            GLOBAL_DATA["ballPosY"] > GLOBAL_DATA["racketRightY"]
         ):
         # Set the fly direction depending on where it hit the racket
         # t is 0.5 if hit at top, 0 at center, -0.5 at bottom
-        t = ((GLOBALDATA["ballPosY"] - GLOBALDATA["racketRightY"]) / RACKET_HEIGHT) - 0.5
-        GLOBALDATA["ballDirX"] = -abs(GLOBALDATA["ballDirX"]) # Force it to be negative
-        GLOBALDATA["ballDirY"] = t
+        t = ((GLOBAL_DATA["ballPosY"] - GLOBAL_DATA["racketRightY"]) / RACKET_HEIGHT) - 0.5
+        GLOBAL_DATA["ballDirX"] = -abs(GLOBAL_DATA["ballDirX"]) # Force it to be negative
+        GLOBAL_DATA["ballDirY"] = t
         print(t)
 
     # Hit left wall?
-    if GLOBALDATA["ballPosX"] < 0:
-        GLOBALDATA["scoreRight"] += 1
-        GLOBALDATA["ballPosX"] = CANVAS_WIDTH / 2
-        GLOBALDATA["ballPosY"] = CANVAS_HEIGHT / 2
-        GLOBALDATA["ballDirX"] = abs(GLOBALDATA["ballDirX"]) # Force it to be positive
-        GLOBALDATA["ballDirY"] = 0
+    if GLOBAL_DATA["ballPosX"] < 0:
+        GLOBAL_DATA["scoreRight"] += 1
+        GLOBAL_DATA["ballPosX"] = CANVAS_WIDTH / 2
+        GLOBAL_DATA["ballPosY"] = CANVAS_HEIGHT / 2
+        GLOBAL_DATA["ballDirX"] = abs(GLOBAL_DATA["ballDirX"]) # Force it to be positive
+        GLOBAL_DATA["ballDirY"] = 0
 
     # Hit right wall?
-    if GLOBALDATA["ballPosX"] > CANVAS_WIDTH:
-        GLOBALDATA["scoreLeft"] += 1
-        GLOBALDATA["ballPosX"] = CANVAS_WIDTH / 2
-        GLOBALDATA["ballPosY"] = CANVAS_HEIGHT / 2
-        GLOBALDATA["ballDirX"] = -abs(GLOBALDATA["ballDirX"]) # Force it to be negative
-        GLOBALDATA["ballDirY"] = 0
+    if GLOBAL_DATA["ballPosX"] > CANVAS_WIDTH:
+        GLOBAL_DATA["scoreLeft"] += 1
+        GLOBAL_DATA["ballPosX"] = CANVAS_WIDTH / 2
+        GLOBAL_DATA["ballPosY"] = CANVAS_HEIGHT / 2
+        GLOBAL_DATA["ballDirX"] = -abs(GLOBAL_DATA["ballDirX"]) # Force it to be negative
+        GLOBAL_DATA["ballDirY"] = 0
 
     # Hit top wall?
-    if GLOBALDATA["ballPosY"] < 0:
-        GLOBALDATA["ballDirY"] = abs(GLOBALDATA["ballDirY"]) # Force to be positive
+    if GLOBAL_DATA["ballPosY"] < 0:
+        GLOBAL_DATA["ballDirY"] = abs(GLOBAL_DATA["ballDirY"]) # Force to be positive
 
     # Hit bottom wall?
-    if GLOBALDATA["ballPosY"] > CANVAS_HEIGHT:
-        GLOBALDATA["ballDirY"] = -abs(GLOBALDATA["ballDirY"]) # Force bot negativef
+    if GLOBAL_DATA["ballPosY"] > CANVAS_HEIGHT:
+        GLOBAL_DATA["ballDirY"] = -abs(GLOBAL_DATA["ballDirY"]) # Force bot negativef
 
 @sdl3.SDL_AppIterate_func
 def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     """SDL_AppIterate"""
     # Delta time
     current_time = sdl3.SDL_GetTicks()
-    delta_time = (current_time - GLOBALDATA["lastTime"]) / 1000
-    GLOBALDATA["lastTime"] = current_time
+    delta_time = (current_time - GLOBAL_DATA["lastTime"]) / 1000
+    GLOBAL_DATA["lastTime"] = current_time
 
     # Input handling
     keyboard(delta_time)
@@ -177,35 +176,35 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
 
     # Draw the left racket
     sdl3.SDL_SetRenderDrawColor(RENDERER, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
-    rect = sdl3.SDL_FRect(RACKET_LEFT_X, GLOBALDATA["racketLeftY"],
+    rect = sdl3.SDL_FRect(RACKET_LEFT_X, GLOBAL_DATA["racketLeftY"],
     RACKET_WIDTH, RACKET_HEIGHT)
     sdl3.SDL_RenderFillRect(RENDERER, rect)
 
     # Draw the right racket
     sdl3.SDL_SetRenderDrawColor(RENDERER, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
-    rect = sdl3.SDL_FRect(RACKET_RIGHT_X, GLOBALDATA["racketRightY"],
+    rect = sdl3.SDL_FRect(RACKET_RIGHT_X, GLOBAL_DATA["racketRightY"],
     RACKET_WIDTH, RACKET_HEIGHT)
     sdl3.SDL_RenderFillRect(RENDERER, rect)
 
     # Draw the ball
     sdl3.SDL_SetRenderDrawColor(RENDERER, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
-    rect = sdl3.SDL_FRect(GLOBALDATA["ballPosX"] - BALL_SIZE / 2, GLOBALDATA["ballPosY"] -
+    rect = sdl3.SDL_FRect(GLOBAL_DATA["ballPosX"] - BALL_SIZE / 2, GLOBAL_DATA["ballPosY"] -
     BALL_SIZE / 2, BALL_SIZE, BALL_SIZE)
     sdl3.SDL_RenderFillRect(RENDERER, rect)
 
-    score_text = "%d:%d".encode() % (GLOBALDATA["scoreLeft"], GLOBALDATA["scoreRight"])
-    surface = sdl3.TTF_RenderText_Blended(GLOBALDATA["font"], score_text, len(score_text),
+    score_text = "%d:%d".encode() % (GLOBAL_DATA["scoreLeft"], GLOBAL_DATA["scoreRight"])
+    surface = sdl3.TTF_RenderText_Blended(GLOBAL_DATA["font"], score_text, len(score_text),
     TEXTCOLOR)
-    GLOBALDATA["textTexture"] = sdl3.SDL_CreateTextureFromSurface(RENDERER, surface)
+    GLOBAL_DATA["textTexture"] = sdl3.SDL_CreateTextureFromSurface(RENDERER, surface)
     sdl3.SDL_DestroySurface(surface)
 
     width, height = ctypes.c_float(), ctypes.c_float()
-    sdl3.SDL_GetTextureSize(GLOBALDATA["textTexture"], ctypes.byref(width), ctypes.byref(height))
+    sdl3.SDL_GetTextureSize(GLOBAL_DATA["textTexture"], ctypes.byref(width), ctypes.byref(height))
     rect = sdl3.SDL_FRect(CANVAS_WIDTH / 2 - 18, 5, width.value, height.value)
-    sdl3.SDL_RenderTexture(RENDERER, GLOBALDATA["textTexture"], None, rect)
+    sdl3.SDL_RenderTexture(RENDERER, GLOBAL_DATA["textTexture"], None, rect)
 
     sdl3.SDL_RenderPresent(RENDERER)
-    sdl3.SDL_DestroyTexture(GLOBALDATA["textTexture"])
+    sdl3.SDL_DestroyTexture(GLOBAL_DATA["textTexture"])
     return sdl3.SDL_APP_CONTINUE
 
 @sdl3.SDL_AppQuit_func
