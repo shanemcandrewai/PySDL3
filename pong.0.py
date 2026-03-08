@@ -1,11 +1,10 @@
-"""pong"""
 import ctypes
 import os
 
 os.environ["SDL_MAIN_USE_CALLBACKS"] = "1"
 os.environ["SDL_RENDER_DRIVER"] = "opengl"
 
-import sdl3 # pylint: disable=wrong-import-position
+import sdl3
 
 renderer = ctypes.POINTER(sdl3.SDL_Renderer)()
 window = ctypes.POINTER(sdl3.SDL_Window)()
@@ -46,7 +45,6 @@ ballSpeed = 125
 
 @sdl3.SDL_AppInit_func
 def SDL_AppInit(appstate, argc, argv):
-    """pong"""
     global font
     global canvasWidth
     global canvasHeight
@@ -75,7 +73,6 @@ def SDL_AppInit(appstate, argc, argv):
 
 @sdl3.SDL_AppEvent_func
 def SDL_AppEvent(appstate, event):
-    """pong"""
     if sdl3.SDL_DEREFERENCE(event).type == sdl3.SDL_EVENT_QUIT:
         return sdl3.SDL_APP_SUCCESS
     elif sdl3.SDL_DEREFERENCE(event).type == sdl3.SDL_EVENT_KEY_DOWN:
@@ -100,7 +97,6 @@ def SDL_AppEvent(appstate, event):
     return sdl3.SDL_APP_CONTINUE
 
 def keyboard(deltaTime):
-    """pong"""
     global racketLeftY
     global racketRightY
 
@@ -117,7 +113,6 @@ def keyboard(deltaTime):
         racketRightY += racketSpeed * deltaTime
 
 def updateBall(deltaTime):
-    """pong"""
     global ballDirX
     global ballDirY
     global ballPosX
@@ -179,7 +174,6 @@ def updateBall(deltaTime):
 
 @sdl3.SDL_AppIterate_func
 def SDL_AppIterate(appstate):
-    """pong"""
     global lastTime
 
     # Delta time
@@ -227,4 +221,4 @@ def SDL_AppIterate(appstate):
 
 @sdl3.SDL_AppQuit_func
 def SDL_AppQuit(appstate, result):
-    """pong"""
+    ... # SDL will clean up the window/renderer for us
