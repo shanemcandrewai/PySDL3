@@ -9,7 +9,7 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
         print(f"Failed to initialize library: {sdl3.SDL_GetError().decode()}.")
         return -1
 
-    if not (window := sdl3.SDL_CreateWindow("Aermoss".encode(), 1600, 900, sdl3.SDL_WINDOW_RESIZABLE)):
+    if not (window := sdl3.SDL_CreateWindow("Aermoss".encode(), 720, 540, sdl3.SDL_WINDOW_RESIZABLE)):
         print(f"Failed to create window: {sdl3.SDL_GetError().decode()}.")
         return -1
 
@@ -98,7 +98,6 @@ def main(argc: ctypes.c_int, argv: sdl3.LP_c_char_p) -> ctypes.c_int:
             if textTexture is not None:
                 sdl3.SDL_DestroySurface(textSurface)
                 sdl3.SDL_DestroyTexture(textTexture)
-
             textSurface = sdl3.TTF_RenderText_Blended(font, f"FPS: {framesPerSecond}".encode(), 0, sdl3.SDL_Color(255, 255, 255, 255))
             textTexture = sdl3.SDL_CreateTextureFromSurface(renderer, textSurface)
 
