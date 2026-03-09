@@ -69,18 +69,18 @@ def SDL_AppEvent(appstate, event):# pylint: disable=invalid-name, unused-argumen
             LEFT_RACKET_KEYS["up"] = True
         if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_S:
             LEFT_RACKET_KEYS["down"] = True
-        if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_UP:
+        if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_UP:
             RIGHT_RACKET_KEYS["up"] = True
-        if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_DOWN:
+        if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_DOWN:
             RIGHT_RACKET_KEYS["down"] = True
     elif sdl3.SDL_DEREFERENCE(event).type == sdl3.SDL_EVENT_KEY_UP:
         if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_W:
             LEFT_RACKET_KEYS["up"] = False
         if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_S:
             LEFT_RACKET_KEYS["down"] = False
-        if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_UP:
+        if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_UP:
             RIGHT_RACKET_KEYS["up"] = False
-        if sdl3.SDL_DEREFERENCE(event).button.button == sdl3.SDL_SCANCODE_DOWN:
+        if sdl3.SDL_DEREFERENCE(event).key.scancode == sdl3.SDL_SCANCODE_DOWN:
             RIGHT_RACKET_KEYS["down"] = False
 
     return sdl3.SDL_APP_CONTINUE
