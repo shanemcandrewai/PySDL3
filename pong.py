@@ -195,16 +195,16 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     score_text = "%d:%d".encode() % (GLOBAL_DATA["scoreLeft"], GLOBAL_DATA["scoreRight"])
     surface = sdl3.TTF_RenderText_Blended(GLOBAL_DATA["font"], score_text, len(score_text),
     TEXTCOLOR)
-    GLOBAL_DATA["textTexture"] = sdl3.SDL_CreateTextureFromSurface(RENDERER, surface)
+    text_texture = sdl3.SDL_CreateTextureFromSurface(RENDERER, surface)
     sdl3.SDL_DestroySurface(surface)
 
     width, height = ctypes.c_float(), ctypes.c_float()
-    sdl3.SDL_GetTextureSize(GLOBAL_DATA["textTexture"], ctypes.byref(width), ctypes.byref(height))
+    sdl3.SDL_GetTextureSize(text_texture, ctypes.byref(width), ctypes.byref(height))
     rect = sdl3.SDL_FRect(CANVAS_WIDTH / 2 - 18, 5, width.value, height.value)
-    sdl3.SDL_RenderTexture(RENDERER, GLOBAL_DATA["textTexture"], None, rect)
+    sdl3.SDL_RenderTexture(RENDERER, text_texture, None, rect)
 
     sdl3.SDL_RenderPresent(RENDERER)
-    sdl3.SDL_DestroyTexture(GLOBAL_DATA["textTexture"])
+    sdl3.SDL_DestroyTexture(text_texture)
     return sdl3.SDL_APP_CONTINUE
 
 @sdl3.SDL_AppQuit_func
