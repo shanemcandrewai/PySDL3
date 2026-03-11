@@ -39,8 +39,6 @@ def SDL_AppEvent(appstate, event):# pylint: disable=invalid-name, unused-argumen
 def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     """SDL_AppIterate"""
 
-    charsize = sdl3.SDL_DEBUG_TEXT_FONT_CHARACTER_SIZE
-
     # As you can see from this, rendering draws over whatever was drawn before it
     sdl3.SDL_SetRenderDrawColor(renderer, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
     sdl3.SDL_RenderClear(renderer) # Start with a blank canvas
