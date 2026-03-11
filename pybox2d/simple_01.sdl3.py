@@ -6,7 +6,6 @@ https://github.com/pybox2d/pybox2d/blob/master/library/Box2D/examples/simple/sim
 
 import ctypes
 import os
-import Box2D  # pylint: disable=unused-import
 # Box2D.b2 maps Box2D.b2Vec2 to vec2 (and so on)
 from Box2D.b2 import (world, polygonShape, staticBody, dynamicBody)
 os.environ["SDL_MAIN_USE_CALLBACKS"] = "1"
@@ -91,8 +90,6 @@ class Box2Ddraw:
 def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     """SDL_AppIterate"""
 # --- main game loop ---
-
-    # screen.fill((0, 0, 0, 0))
     sdl3.SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, sdl3.SDL_ALPHA_OPAQUE)
     sdl3.SDL_RenderClear(RENDERER) # Start with a blank canvas
     # Draw the world
