@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Box2D simple example convert from pygame backend to PySDL3
-based on
+"""Box2D simple example converted from pygame backend to PySDL3 based on
 https://github.com/pybox2d/pybox2d/blob/master/library/Box2D/examples/simple/simple_01.py"""
 
 import ctypes
@@ -125,9 +124,6 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     # on these parameters and their implications.
     world.Step(TIME_STEP, 10, 10)
 
-    # Flip the screen and try to keep at the target FPS
-    # pygame.display.flip()
-    # clock.tick(TARGET_FPS)
     sdl3.SDL_RenderPresent(RENDERER)
     return sdl3.SDL_APP_CONTINUE
 
