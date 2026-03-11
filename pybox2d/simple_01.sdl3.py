@@ -75,34 +75,17 @@ class Box2Ddraw:
         """draw_polygon"""
         sdl3.SDL_SetRenderDrawColor(
         self.renderer, color[0], color[1], color[2], sdl3.SDL_ALPHA_OPAQUE)
-
-        x0 = vertices[0][0]
-        y0 = vertices[0][1]
-        x1 = vertices[1][0]
-        y1 = vertices[1][1]
-        sdl3.SDL_RenderLine(self.renderer, x0, y0, x1, y1)
-
-        x1 = vertices[1][0]
-        y1 = vertices[1][1]
-        x2 = vertices[2][0]
-        y2 = vertices[2][1]
-        sdl3.SDL_RenderLine(self.renderer, x1, y1, x2, y2)
-
-        x2 = vertices[2][0]
-        y2 = vertices[2][1]
-        x3 = vertices[3][0]
-        y3 = vertices[3][1]
-        sdl3.SDL_RenderLine(self.renderer, x2, y2, x3, y3)
-
-        x3 = vertices[3][0]
-        y3 = vertices[3][1]
-        x0 = vertices[0][0]
-        y0 = vertices[0][1]
-        sdl3.SDL_RenderLine(self.renderer, x3, y3, x0, y0)
+        num_vert = len(vertices)
+        for index, vertex in enumerate(vertices):
+            if index == num_vert - 1:
+                sdl3.SDL_RenderLine(self.renderer, vertex[0], vertex[1],
+                vertices[0][0], vertices[0][1])
+            else:
+                sdl3.SDL_RenderLine(self.renderer, vertex[0], vertex[1],
+                vertices[index + 1][0], vertices[index + 1][1])
 
     def draw_circle(self, center, radius):
         """draw circle"""
-
 
 @sdl3.SDL_AppIterate_func
 def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
