@@ -1,9 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """Box2D simple example convert from pygame backend to PySDL3
 based on
 https://github.com/pybox2d/pybox2d/blob/master/library/Box2D/examples/simple/simple_01.py"""
 
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import ctypes
 import os
 import Box2D  # pylint: disable=unused-import
@@ -20,14 +20,8 @@ PPM = 20.0  # pixels per meter
 TARGET_FPS = 60
 TIME_STEP = 1.0 / TARGET_FPS
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
-
-# --- pygame setup ---
-# screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
-# pygame.display.set_caption('Simple pygame example')
-# clock = pygame.time.Clock()
 RENDERER = ctypes.POINTER(sdl3.SDL_Renderer)()
 WINDOW = ctypes.POINTER(sdl3.SDL_Window)()
-
 
 # --- pybox2d world setup ---
 # Create the world
@@ -79,11 +73,6 @@ class Box2Ddraw:
 
     def draw_polygon(self, color, vertices):
         """draw_polygon"""
-        # r = int(color.r * 255)
-        # g = int(color.g * 255)
-        # b = int(color.b * 255)
-        # sdl3.SDL_SetRenderDrawColor(self.renderer, r, g, b, sdl3.SDL_ALPHA_OPAQUE)
-
         sdl3.SDL_SetRenderDrawColor(
         self.renderer, color[0], color[1], color[2], sdl3.SDL_ALPHA_OPAQUE)
 
@@ -118,19 +107,10 @@ class Box2Ddraw:
 @sdl3.SDL_AppIterate_func
 def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     """SDL_AppIterate"""
-
-
 # --- main game loop ---
-# running = True
-# while running:
-    # Check the event queue
-    # for event in pygame.event.get():
-        # if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
-            # The user closed the window or pressed escape
-            # running = False
 
     # screen.fill((0, 0, 0, 0))
-    sdl3.SDL_SetRenderDrawColor(RENDERER, 100, 0, 0, sdl3.SDL_ALPHA_OPAQUE)
+    sdl3.SDL_SetRenderDrawColor(RENDERER, 0, 0, 0, sdl3.SDL_ALPHA_OPAQUE)
     sdl3.SDL_RenderClear(RENDERER) # Start with a blank canvas
     # Draw the world
     for body in (ground_body, dynamic_body):  # or: world.bodies
@@ -170,7 +150,6 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     # clock.tick(TARGET_FPS)
     sdl3.SDL_RenderPresent(RENDERER)
     return sdl3.SDL_APP_CONTINUE
-
 
 @sdl3.SDL_AppQuit_func
 def SDL_AppQuit(appstate, result):# pylint: disable=invalid-name, unused-argument
