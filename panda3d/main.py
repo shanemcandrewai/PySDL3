@@ -22,6 +22,11 @@ class MyApp(ShowBase):
         self.scene.setScale(0.25, 0.25, 0.25)
         self.scene.setPos(-8, 42, 0)
 
+        self.cyl = self.loader.loadModel("../../../../../PySDL3/blender/cylinder.glb")
+        self.cyl.reparentTo(self.render)
+        self.cyl.setPos(0, -5, 1)
+        # self.cyl.setAntialias(AntialiasAttrib.MAuto)
+
         # Add the spinCameraTask procedure to the task manager.
         self.taskMgr.add(self.spinCameraTask, "SpinCameraTask")
 

@@ -9,6 +9,7 @@ renderer = ctypes.POINTER(sdl3.SDL_Renderer)()
 window = ctypes.POINTER(sdl3.SDL_Window)()
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
+
 @sdl3.SDL_AppInit_func
 def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-argument
     """SDL_AppInit"""
@@ -21,6 +22,16 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
     WINDOW_WIDTH, WINDOW_HEIGHT, sdl3.SDL_WINDOW_RESIZABLE, window, renderer):
         sdl3.SDL_Log("Couldn't create window/renderer: %s".encode() % sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
+
+    # load image into texture
+    texture = sdl3.IMG_LoadTexture(renderer, "./blender/cylinder.png".encode())
+    if not texture:
+        sdl3.SDL_Log("Error: %s".encode() % sdl3.SDL_GetError())
+        return sdl3.SDL_APP_FAILURE
+
+    # add texture to appstate
+    appstate[0] = ctypes.cast(
+    ctypes.pointer(ctypes.py_object({"texture" : texture})), ctypes.c_void_p)
 
     sdl3.SDL_SetRenderLogicalPresentation(renderer, WINDOW_WIDTH, WINDOW_HEIGHT,
     sdl3.SDL_LOGICAL_PRESENTATION_LETTERBOX)
@@ -56,6 +67,10 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     # Third rectangle
     sdl3.SDL_SetRenderDrawColor(renderer, 0, 0, 255, sdl3.SDL_ALPHA_OPAQUE)
     sdl3.SDL_RenderRect(renderer, sdl3.SDL_FRect(135, 290, 200, 20))
+
+    # retrieve image (texture) from appstate
+    texture = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["texture"]
+    sdl3.SDL_RenderTexture(renderer, texture, None, sdl3.SDL_FRect(90, 140, 90, 60))
 
     sdl3.SDL_RenderPresent(renderer)
     return sdl3.SDL_APP_CONTINUE

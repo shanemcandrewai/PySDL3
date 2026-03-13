@@ -16,13 +16,19 @@ class MyApp(ShowBase):
 
         # Load the environment model.
         self.scene = self.loader.loadModel("models/environment")
+
         # Reparent the model to render.
         self.scene.reparentTo(self.render)
+
         # Apply scale and position transforms on the model.
         # self.scene.setScale(0.25, 0.25, 0.25)
         self.scene.setScale(0.025, 0.025, 0.025)
         # self.scene.setPos(-8, 42, 0)
         self.scene.setPos(0, 0, 0)
+
+        self.cyl = self.loader.loadModel("../../../../../PySDL3/blender/cylinder.glb")
+        self.cyl.reparentTo(self.render)
+        self.cyl.setPos(0, -10, 10)
 
         # Add the spinCameraTask procedure to the task manager.
         # self.taskMgr.add(self.spinCameraTask, "SpinCameraTask")
@@ -39,7 +45,7 @@ class MyApp(ShowBase):
         self.pandaActor.reparentTo(self.render)
         # Loop its animation.
         self.pandaActor.loop("walk")
-        self.pandaActor.place()
+        # self.pandaActor.place()
 
         # Create the four lerp intervals needed for the panda to
         # walk back and forth.
