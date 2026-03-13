@@ -5,8 +5,6 @@ os.environ["SDL_MAIN_USE_CALLBACKS"] = "1"
 # os.environ["SDL_RENDER_DRIVER"] = "opengl"
 import sdl3 # pylint: disable=wrong-import-position
 
-renderer = ctypes.POINTER(sdl3.SDL_Renderer)()
-window = ctypes.POINTER(sdl3.SDL_Window)()
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
 
@@ -18,6 +16,8 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
         return sdl3.SDL_APP_FAILURE
     sdl3.SDL_Log("SDL initialized".encode())
 
+    window = ctypes.POINTER(sdl3.SDL_Window)()
+    renderer = ctypes.POINTER(sdl3.SDL_Renderer)()
     if not sdl3.SDL_CreateWindowAndRenderer("Draw outline rectangles using PySDL3".encode(),
     WINDOW_WIDTH, WINDOW_HEIGHT, sdl3.SDL_WINDOW_RESIZABLE, window, renderer):
         sdl3.SDL_Log("Couldn't create window/renderer: %s".encode() % sdl3.SDL_GetError())
@@ -29,13 +29,13 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
         sdl3.SDL_Log("Error: %s".encode() % sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
-    # add texture to appstate
-    appstate[0] = ctypes.cast(
-    ctypes.pointer(ctypes.py_object({"texture" : texture})), ctypes.c_void_p)
-
     sdl3.SDL_SetRenderLogicalPresentation(renderer, WINDOW_WIDTH, WINDOW_HEIGHT,
     sdl3.SDL_LOGICAL_PRESENTATION_LETTERBOX)
     sdl3.SDL_SetRenderVSync(renderer, 1) # Turn on vertical sync
+
+    # add texture and renderer to appstate
+    appstate[0] = ctypes.cast(
+    ctypes.pointer(ctypes.py_object({"texture" : texture, "renderer" : renderer})), ctypes.c_void_p)
 
     return sdl3.SDL_APP_CONTINUE
 
@@ -49,6 +49,9 @@ def SDL_AppEvent(appstate, event):# pylint: disable=invalid-name, unused-argumen
 @sdl3.SDL_AppIterate_func
 def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     """SDL_AppIterate"""
+
+    # retrieve renderer from appstate
+    renderer = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["renderer"]
 
     # As you can see from this, rendering draws over whatever was drawn before it
     sdl3.SDL_SetRenderDrawColor(renderer, 255, 255, 255, sdl3.SDL_ALPHA_OPAQUE)
