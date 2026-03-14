@@ -1,0 +1,7 @@
+Blender
+
+camara 
+7, 7, 5
+63.2027, 0, 45
+
+Render properties > film > Transparent
