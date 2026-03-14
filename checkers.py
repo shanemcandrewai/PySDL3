@@ -24,8 +24,8 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
         return sdl3.SDL_APP_FAILURE
 
     # load image into texture
-    tex_blue = sdl3.IMG_LoadTexture(renderer, "./blender/blue.png".encode())
-    if not tex_blue:
+    tex_white = sdl3.IMG_LoadTexture(renderer, "./blender/white.ortho.png".encode())
+    if not tex_white:
         sdl3.SDL_Log("Error: %s".encode() % sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
@@ -37,7 +37,7 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
     appstate[0] = ctypes.cast(
     ctypes.pointer(ctypes.py_object({
     "renderer" : renderer,
-    "tex_blue" : tex_blue,
+    "tex_white" : tex_white,
     })), ctypes.c_void_p)
 
     return sdl3.SDL_APP_CONTINUE
@@ -75,27 +75,21 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     sdl3.SDL_RenderRect(renderer, sdl3.SDL_FRect(135, 290, 200, 20))
 
     # retrieve itextures from appstate
-    tex_blue = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["tex_blue"]
-    width = 90
-    height = 90
-    blackx = 30
-    whitex =100
+    tex_white = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["tex_white"]
+    width = 180
+    height = 180
+    xstart = 0
+    ystart = 0
+    xrow = 66
+    yrow = 31
+    xcol = 66
+    ycol = 96
 
-    for row in range(6):
-        for col in range(3):
-            for bw in ((blackx, tex_blue), (whitex, tex_blue)):
-                sdl3.SDL_RenderTexture(renderer, bw[1],
-                None, sdl3.SDL_FRect(bw[0] + col * 140 + row * 35, 140 + row * 12, width, height))
-
-    # sdl3.SDL_RenderTexture(renderer, tex_black, None, sdl3.SDL_FRect(90, 140, 90, 60))
-    # sdl3.SDL_RenderTexture(renderer, tex_white, None, sdl3.SDL_FRect(160, 140, 90, 60))
-    # sdl3.SDL_RenderTexture(renderer, tex_black, None, sdl3.SDL_FRect(230, 140, 90, 60))
-    # sdl3.SDL_RenderTexture(renderer, tex_white, None, sdl3.SDL_FRect(300, 140, 90, 60))
-
-    # sdl3.SDL_RenderTexture(renderer, tex_black, None, sdl3.SDL_FRect(125, 152, 90, 60))
-    # sdl3.SDL_RenderTexture(renderer, tex_white, None, sdl3.SDL_FRect(195, 152, 90, 60))
-    # sdl3.SDL_RenderTexture(renderer, tex_black, None, sdl3.SDL_FRect(265, 152, 90, 60))
-    # sdl3.SDL_RenderTexture(renderer, tex_white, None, sdl3.SDL_FRect(335, 152, 90, 60))
+    for row in range(4):
+        for col in range(4):
+            sdl3.SDL_RenderTexture(renderer, tex_white, None,
+            sdl3.SDL_FRect(xstart + row * xrow + col * xcol,
+            ystart + row * yrow + col * ycol, width, height))
 
     sdl3.SDL_RenderPresent(renderer)
     return sdl3.SDL_APP_CONTINUE
