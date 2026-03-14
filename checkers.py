@@ -24,12 +24,8 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
         return sdl3.SDL_APP_FAILURE
 
     # load image into texture
-    tex_black = sdl3.IMG_LoadTexture(renderer, "./blender/black.ortho.png".encode())
-    if not tex_black:
-        sdl3.SDL_Log("Error: %s".encode() % sdl3.SDL_GetError())
-        return sdl3.SDL_APP_FAILURE
-    tex_white = sdl3.IMG_LoadTexture(renderer, "./blender/white.ortho.png".encode())
-    if not tex_white:
+    tex_blue = sdl3.IMG_LoadTexture(renderer, "./blender/blue.png".encode())
+    if not tex_blue:
         sdl3.SDL_Log("Error: %s".encode() % sdl3.SDL_GetError())
         return sdl3.SDL_APP_FAILURE
 
@@ -41,8 +37,7 @@ def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-arg
     appstate[0] = ctypes.cast(
     ctypes.pointer(ctypes.py_object({
     "renderer" : renderer,
-    "tex_black" : tex_black,
-    "tex_white" : tex_white
+    "tex_blue" : tex_blue,
     })), ctypes.c_void_p)
 
     return sdl3.SDL_APP_CONTINUE
@@ -80,8 +75,7 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     sdl3.SDL_RenderRect(renderer, sdl3.SDL_FRect(135, 290, 200, 20))
 
     # retrieve itextures from appstate
-    tex_black = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["tex_black"]
-    tex_white = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["tex_white"]
+    tex_blue = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["tex_blue"]
     width = 90
     height = 90
     blackx = 30
@@ -89,7 +83,7 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
 
     for row in range(6):
         for col in range(3):
-            for bw in ((blackx, tex_black), (whitex, tex_white)):
+            for bw in ((blackx, tex_blue), (whitex, tex_blue)):
                 sdl3.SDL_RenderTexture(renderer, bw[1],
                 None, sdl3.SDL_FRect(bw[0] + col * 140 + row * 35, 140 + row * 12, width, height))
 
