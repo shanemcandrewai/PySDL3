@@ -80,17 +80,19 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     height = 180
     xstart = 0
     ystart = 0
-    xrow = 70
-    yrow = 32
     xcol = 70
-    ycol = 95
+    ycol = 32
+    xrow = 70
+    yrow = 95
 
-    for col in range(4):
-        for row in range(3):
+    for row in range(4):
+        for col in range(4):
             sdl3.SDL_RenderTexture(renderer, texture, None, sdl3.SDL_FRect(
             xstart + row * xrow + col * xcol,
             ystart + row * yrow + col * ycol,
             width, height))
+        xstart =- 70 * (row+1)
+        ystart =- 32 * (row+1)
 
     sdl3.SDL_RenderPresent(renderer)
     return sdl3.SDL_APP_CONTINUE
