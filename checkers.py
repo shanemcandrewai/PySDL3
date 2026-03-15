@@ -76,23 +76,26 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
 
     # retrieve itextures from appstate
     texture = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["texture"]
-    width = 180
-    height = 180
-    xstart = 0
+    scale = 0.5
+    width = 180 * scale
+    height = 180 * scale
+    xstart = 400
     ystart = 0
-    xcol = 70
-    ycol = 32
-    xrow = 70
-    yrow = 95
+    xcol = 70 * scale
+    ycol = 32 * scale
+    xrow = 70 * scale
+    yrow = 95 * scale
+    cols_row = 0
+    max_side = 5
 
-    for row in range(4):
-        for col in range(4):
-            sdl3.SDL_RenderTexture(renderer, texture, None, sdl3.SDL_FRect(
-            xstart + row * xrow + col * xcol,
-            ystart + row * yrow + col * ycol,
-            width, height))
-        xstart =- 70 * (row+1)
-        ystart =- 32 * (row+1)
+    for row in range(max_side*2):
+        for col in range(max(0, 2*(row-max_side)), 2*min(max_side, cols_row)):
+            if (col) % 2 == 1:
+                sdl3.SDL_RenderTexture(renderer, texture, None, sdl3.SDL_FRect(
+                xstart + row * xrow + (col-3*row) * xcol,
+                ystart + row * yrow + (col-3*row) * ycol,
+                width, height))
+        cols_row += 1
 
     sdl3.SDL_RenderPresent(renderer)
     return sdl3.SDL_APP_CONTINUE
