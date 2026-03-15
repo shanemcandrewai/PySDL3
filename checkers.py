@@ -7,6 +7,35 @@ import sdl3 # pylint: disable=wrong-import-position
 
 WINDOW_WIDTH = 640
 WINDOW_HEIGHT = 480
+GRID_SIDE = 4
+GRID_SCALE = 1
+GRID_X_TOP_RIGHT = 600
+GRID_Y_TOP_RIGHT = 0
+
+class Grid:
+    """Grid"""
+    def __init__(self, renderer):
+        self.renderer = renderer
+    def move_player(self, texture, scale):
+        """Move player"""
+    def draw_grid(self, texture, scale=GRID_SCALE):
+        """Draw grid"""
+        width = 180 * scale
+        height = 180 * scale
+        xcol = 70 * scale
+        ycol = 32 * scale
+        xrow = 70 * scale
+        yrow = 94 * scale
+        cols_row = 0
+
+        for row in range(2*GRID_SIDE):
+            for col in range(2*max(0, row-GRID_SIDE), 2*min(GRID_SIDE, cols_row)-1):
+                if (col) % 2 == 0:
+                    sdl3.SDL_RenderTexture(self.renderer, texture, None, sdl3.SDL_FRect(
+                    GRID_X_TOP_RIGHT + row * xrow + (col-3*row) * xcol,
+                    GRID_Y_TOP_RIGHT + row * yrow + (col-3*row) * ycol,
+                    width, height))
+            cols_row += 1
 
 @sdl3.SDL_AppInit_func
 def SDL_AppInit(appstate, argc, argv):# pylint: disable=invalid-name, unused-argument
@@ -74,28 +103,8 @@ def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
     sdl3.SDL_SetRenderDrawColor(renderer, 0, 0, 255, sdl3.SDL_ALPHA_OPAQUE)
     sdl3.SDL_RenderRect(renderer, sdl3.SDL_FRect(135, 290, 200, 20))
 
-    # retrieve itextures from appstate
     texture = ctypes.cast(appstate, ctypes.POINTER(ctypes.py_object)).contents.value["texture"]
-    scale = 0.5
-    width = 180 * scale
-    height = 180 * scale
-    xstart = 400
-    ystart = 0
-    xcol = 70 * scale
-    ycol = 32 * scale
-    xrow = 70 * scale
-    yrow = 95 * scale
-    cols_row = 0
-    max_side = 5
-
-    for row in range(max_side*2):
-        for col in range(max(0, 2*(row-max_side)), 2*min(max_side, cols_row)):
-            if (col) % 2 == 1:
-                sdl3.SDL_RenderTexture(renderer, texture, None, sdl3.SDL_FRect(
-                xstart + row * xrow + (col-3*row) * xcol,
-                ystart + row * yrow + (col-3*row) * ycol,
-                width, height))
-        cols_row += 1
+    Grid(renderer).draw_grid(texture)
 
     sdl3.SDL_RenderPresent(renderer)
     return sdl3.SDL_APP_CONTINUE
