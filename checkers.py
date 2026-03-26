@@ -79,7 +79,7 @@ def SDL_AppEvent(appstate, event):# pylint: disable=invalid-name, unused-argumen
     return sdl3.SDL_APP_CONTINUE
 
 @sdl3.SDL_AppIterate_func
-def SDL_AppIterate(appstate):# pylint: disable=invalid-name, unused-argument
+def SDL_AppIterate(appstate):
     """SDL_AppIterate"""
 
     # retrieve renderer from appstate
